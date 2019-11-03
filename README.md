@@ -1,2 +1,26 @@
-# family-dashboard
-A family dashboard to digitalize some aspects of your personal and families life, in a private and motivating manner.
+# Family Dashboard
+
+## Planned Features?
+
+- Stats
+  - Sports
+    - Show weekly/monthly/yearly statistics in contrast to last year (volume, pace, hours)
+  - Living
+    - Sugar consumption per day
+    - Watched hours Netflix,Youtube... per week
+    - Working time
+    - Sleeping time
+  - Home
+    - Monthly power consumption
+- Photo Slider
+- Useful contextual information (Weather, TRAM, ...)
+- Upcoming events
+
+## Features Implementation Details
+
+### Stats 
+
+Technologies:
+- Django (Data input and retrieval)
+- Prometheus (Monitoring base, storing data as timeseries)
+- Grafana (Visualization)
