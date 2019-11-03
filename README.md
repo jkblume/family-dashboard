@@ -7,6 +7,7 @@
     - Show weekly/monthly/yearly statistics in contrast to last year (volume, pace, hours)
   - Living
     - Sugar consumption per day
+    - Coffee consumption per month
     - Watched hours Netflix,Youtube... per week
     - Working time
     - Sleeping time
