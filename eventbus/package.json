@@ -1,0 +1,9 @@
+{
+  "name": "eventbus",
+  "version": "1.0.0",
+  "main": "index.js",
+  "dependencies": {
+    "redis": "^2.8.0",
+    "socket.io": "^2.3.0"
+  }
+}
