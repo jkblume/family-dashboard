@@ -10,5 +10,8 @@ dj-database-url = "*"
 dj-static = "*"
 gunicorn = "*"
 psycopg2-binary = "*"
+django-redis = "*"
+djangorestframework = "*"
 
 [dev-packages]
+black = "==19.3b0"

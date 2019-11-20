@@ -1,7 +1,5 @@
 from django.urls import path
 
-from frontend import views
+from actions import views
 
-urlpatterns = [
-    path('', views.dashboard),
-]
+urlpatterns = [path("detected_person", views.detected_person)]
