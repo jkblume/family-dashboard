@@ -1,5 +1,4 @@
 from django.contrib import admin
-from eventstream.models import Event, Activity
+from eventstream.models import Event
 
 admin.site.register(Event)
-admin.site.register(Activity)
