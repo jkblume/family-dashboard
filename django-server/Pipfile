@@ -1,0 +1,14 @@
+[[source]]
+url = "https://pypi.python.org/simple"
+verify_ssl = true
+name = "pypi"
+
+[packages]
+django = "*"
+pillow = "*"
+dj-database-url = "*"
+dj-static = "*"
+gunicorn = "*"
+psycopg2-binary = "*"
+
+[dev-packages]
