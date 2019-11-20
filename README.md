@@ -23,10 +23,7 @@ This dashboard should motivate the whole family to be more active/sportly and to
 - Upcoming family or personal events (birthday's, events in your city, etc.)
 - Competition between kids (depending on several stats)
 - AI Stuff (Use cases):
-  - Predict, when I get ill?
   - What persons are standing in front of the dashboard?
-  - Play me the music i want to hear now.
-  - Make an prediction what movie/series i/we want to look this evening.
 
 ## ⚙️ Under the Hood 
 
