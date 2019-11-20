@@ -20,5 +20,7 @@ ADD . /app
 
 RUN make build
 
+COPY nginx.conf /etc/nginx/conf.d/default.conf
+
 CMD ["make", "run"]
 
