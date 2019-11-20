@@ -1,9 +1,7 @@
-// this script is just for testing purposes
-
 <script src="/socket.io/socket.io.js"></script>
 <script>
     var socket = io('http://localhost:8080');
-    socket.on('notifications', (data) => {
+    socket.on('notifications_server', (data) => {
         console.log(data);
     });
 

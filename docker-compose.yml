@@ -1,0 +1,27 @@
+version: '3'
+services:
+  frontend:
+    build: frontend
+    ports:
+    - "81:80"
+  eventbus:
+    build: eventbus
+    ports:
+    - "8080:8080"
+    environment:
+      REDIS_URL: "redis://redis:6379/1"
+  djangoserver:
+    build: django-server
+    ports:
+    - "8000:8000"
+    environment:
+      DATABASE_URL: "postgres://admin:admin@postgres:5432/db"
+      CACHE_URL: "redis://redis:6379/1"
+  redis:
+    image: redis
+  postgres:
+    image: postgres:9.6
+    environment:
+      POSTGRES_USER: admin
+      POSTGRES_PASSWORD: admin
+      POSTGRES_DB: db
