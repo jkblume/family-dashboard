@@ -2,6 +2,12 @@
 
 This dashboard should motivate the whole family to be more active/sportly and to live a digital life. But in respect to privacy and data that exist as long as you want!
 
+## Usage
+
+1. Run `docker-compose up -d` to start all services
+1. Navigate to http://localhost:81 into your browser (for frontend view)
+1. Navigate to http://localhost:8000/admin into your browser (for django server admin interface, user in dev mode: root with pw root1234)
+
 ## 💻 Planned Features? 
 
 - Stats
@@ -28,9 +34,11 @@ This dashboard should motivate the whole family to be more active/sportly and to
 ## ⚙️ Under the Hood 
 
 Technologies, that will take place in this project:
-- Vue and/or Svelte (Dynamicness into frontend)
+- Vue (Dynamicness into frontend)
 - Django (Data input and retrieval as well as persistence)
-- Prometheus (Storing data as timeseries)
-- Grafana (Visualization)
+- socket.io (Websocket Server)
+- PostgresQL (Database)
+- Redis (Key/Value Store, Ephemeral database for event stream between backend services)
 - Docker (Application Packaging/Runtime)
+Eventually:
 - Kubernetes (Orchestration to handle the massive load, that comes from the family members ;) )
