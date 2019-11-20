@@ -1,4 +1,4 @@
-FROM node:lts-slim
+FROM arm32v7/node:lts-slim
 
 RUN apt-get update
 RUN apt-get install -y make
