@@ -2,6 +2,7 @@ import cv2
 import numpy as np
 import time
 from time import sleep
+import post_to_webservice
 
 cascPath = "haarcascade_frontalface_default.xml"
 faceCascade = cv2.CascadeClassifier(cascPath)
@@ -31,6 +32,8 @@ while True:
         for i in range(len(all_face_snips)):
             #np.save("detected-faces/face" + time.strftime("%Y%m%d-%H%M%S") + ".npy", all_face_snips[i])
             cv2.imwrite("detected-faces/face" + time.strftime("%Y%m%d-%H%M%S") + ".png", all_face_snips[i])
-        sleep(3)
+        
+        post_to_webservice.send_request()
+        sleep(5)
     else:
-        pass
+        print("No face detected.")
