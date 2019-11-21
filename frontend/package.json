@@ -14,7 +14,8 @@
     "core-js": "^2.6.5",
     "vue": "^2.6.10",
     "vue-router": "^3.0.3",
-    "vue-template-compiler": "^2.6.10"
+    "vue-template-compiler": "^2.6.10",
+    "socket.io-client": "^2.3.0"
   },
   "devDependencies": {
     "@vue/cli-plugin-babel": "^3.10.0",

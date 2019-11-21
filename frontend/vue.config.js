@@ -6,7 +6,7 @@ module.exports = {
       .set("$vue", "ue/dist/vue.esm.js")
   },
   devServer: {
-    port: 8000,
+    port: 1024,
     open: true,
     host: "localhost",
     contentBase: path.resolve(__dirname, "dist"),
