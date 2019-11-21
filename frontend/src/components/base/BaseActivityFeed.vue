@@ -1,5 +1,6 @@
 <template>
   <div>
+      Activity Feed:
       <div v-for="activity in activityFeed">
           {{ activity }}
       </div>
@@ -15,10 +16,7 @@ export default {
         return {
             socket: null,
             eventBusUrl: "http://localhost:8080",
-            activityFeed: [{
-                firstName: "Jakob",
-                lastName: "Blume"
-            }]
+            activityFeed: []
         }
     },
     mounted() {
