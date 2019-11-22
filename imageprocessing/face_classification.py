@@ -5,8 +5,7 @@ import tensorflow
 from PIL import Image
 
 
-onlyfiles = [f for f in listdir("detected-faces") if isfile(join("detected-faces", f))]
-print(onlyfiles)
+all_images = [f for f in listdir("detected-faces") if isfile(join("detected-faces", f))]
 
 #array1 = np.load("detected-faces/" + onlyfiles[0])
 
@@ -22,7 +21,7 @@ model = tensorflow.keras.models.load_model('tf-model/keras_model.h5')
 data = np.ndarray(shape=(1, 224, 224, 3), dtype=np.float32)
 
 # Replace this with the path to your image
-image = Image.open("detected-faces/" + onlyfiles[1])
+image = Image.open("detected-faces/" + all_images[len(all_images)-1])
 
 # Make sure to resize all images to 224, 224 otherwise they won't fit in the array
 image = image.resize((224, 224))
@@ -38,5 +37,18 @@ data[0] = normalized_image_array
 # run the inference
 prediction = model.predict(data)
 print(prediction)
+class_index = np.where(prediction == np.amax(prediction))[1][0]
+
+# link prediction to label
+f=open("tf-model/labels.txt", "r")
+contents=f.readlines()
+f.close()
+
+final_labels = []
+for i in range(len(contents)):
+    split_line = contents[i].split(" ")
+    final_labels.append(split_line)
+
+print(final_labels[class_index][1])
 
 

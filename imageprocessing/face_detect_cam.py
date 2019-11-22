@@ -26,14 +26,11 @@ while True:
     if len(faces) > 0:
         all_face_snips = []
         for (x, y, w, h) in faces:
-            snip_face = frame[y:y+h,x:x+w]
+            snip_face = frame[y-5:y+h+5,x-5:x+w+5]
             all_face_snips.append(snip_face)
             print("Faces detected: " + str(len(all_face_snips)))
         for i in range(len(all_face_snips)):
             #np.save("detected-faces/face" + time.strftime("%Y%m%d-%H%M%S") + ".npy", all_face_snips[i])
-            cv2.imwrite("detected-faces/face" + time.strftime("%Y%m%d-%H%M%S") + ".png", all_face_snips[i])
-        
+            cv2.imwrite("detected-faces/face" + time.strftime("%Y%m%d-%H%M%S") + ".png", all_face_snips[i])       
         post_to_webservice.send_request()
         sleep(5)
-    else:
-        print("No face detected.")
