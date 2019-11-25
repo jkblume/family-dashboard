@@ -55,8 +55,15 @@ def get_embedding(model, face_pixels):
 # start webcam
 video_capture = cv2.VideoCapture(0)
 # load SVM and tf facenet model
-clf = load('trainyourfacenet/svm-clf-model.joblib')
-embedding_model = tensorflow.keras.models.load_model('trainyourfacenet/facenet_keras.h5')
+try:
+    clf = load('trainyourfacenet/svm-clf-model.joblib')
+except:
+    print("Train your own model First")
+
+try:
+    embedding_model = tensorflow.keras.models.load_model('trainyourfacenet/facenet_keras.h5')
+except:
+    print("Download facenet first")
 
 while True:
     # Capture frame-by-frame
