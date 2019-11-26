@@ -1,4 +1,6 @@
 myenv
+ubuntuenv
+test&old
 venv
 __pycache__
 *.pyc
