@@ -6,7 +6,7 @@ from numpy import asarray
 from mtcnn import MTCNN
 import os
 
-target_folder_name = "Jule" # name for folder structure
+target_folder_name = "Jakob" # name for folder structure
 target_folder_data = "val" # val or train
 
 # make directory for new names // train and val need to be in sync
