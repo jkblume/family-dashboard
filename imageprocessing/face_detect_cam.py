@@ -11,6 +11,7 @@ from joblib import load
 import tensorflow
 from sklearn.preprocessing import Normalizer
 from sklearn.svm import SVC
+from post_to_webservice import send_request
 
 #extract all faces from frame (or image in test scenario)
 def extract_face(image,required_size=(160,160)):
@@ -93,5 +94,8 @@ while True:
     print(predicted_classes)
     print("Konfidenz:")
     print(predicted_probas)
+
+
+    # send_request(...current frame..., ...predicted_class...)
 
     sleep(5)
