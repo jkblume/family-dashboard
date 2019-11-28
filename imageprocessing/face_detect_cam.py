@@ -12,6 +12,7 @@ import tensorflow
 from sklearn.preprocessing import Normalizer
 from sklearn.svm import SVC
 from post_to_webservice import send_request
+from trainyourfacenet.download_model import download_model
 
 #extract all faces from frame (or image in test scenario)
 def extract_face(image,required_size=(160,160)):
@@ -61,8 +62,10 @@ try:
 except:
     print("Train your own model First")
 
+download_model()
+
 try:
-    embedding_model = tensorflow.keras.models.load_model('trainyourfacenet/facenet_keras.h5')
+    embedding_model = tensorflow.keras.models.load_model('facenet_keras.h5')
 except:
     print("Download facenet first")
 
