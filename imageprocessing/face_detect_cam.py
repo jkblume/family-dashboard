@@ -13,6 +13,7 @@ from sklearn.preprocessing import Normalizer
 from sklearn.svm import SVC
 from post_to_webservice import send_request
 from trainyourfacenet.download_model import download_model
+import base64
 
 #extract all faces from frame (or image in test scenario)
 def extract_face(image,required_size=(160,160)):
@@ -26,7 +27,7 @@ def extract_face(image,required_size=(160,160)):
     for i in range(len(results)):
         print(results[i]['confidence'])
         #only above 95% confidence
-        if results[i]['confidence'] > 0.95:
+        if results[i]['confidence'] > 0.85:
             #extracttheboundingboxfromthefirstface
             x1,y1,width,height=results[i]['box']
             #bug fix (sometimes negative vals are returened)
@@ -34,12 +35,12 @@ def extract_face(image,required_size=(160,160)):
             x2,y2=x1+width,y1+height
             #extract the face
             face=image[y1:y2,x1:x2]
-            #resize pixels to the model size later used for classification
-            image=Image.fromarray(face)
-            image=image.resize(required_size)
-            face_array=asarray(image)
+            #resize the face image to the model size later used for classification
+            face=Image.fromarray(face)
+            face=face.resize(required_size)
+            face_array=asarray(face)
             all_faces_array.append(face_array)
-            all_imgs_array.append(image)
+            all_imgs_array.append(face)
     return all_faces_array,all_imgs_array
 
 def get_embedding(model, face_pixels):
@@ -52,7 +53,7 @@ def get_embedding(model, face_pixels):
 	samples = expand_dims(face_pixels, axis=0)
 	# make prediction to get embedding
 	predicted_embedding = model.predict(samples)
-	return predicted_embedding
+	return predicted_embedding[0]
 
 # start webcam
 video_capture = cv2.VideoCapture(0)
@@ -76,29 +77,27 @@ while True:
     # get the embedding vector
     face_embeddings = []
     # get the embedding vector of all detected faces
-    for i in range(len(pixels[0])):
-        face_embedding = get_embedding(embedding_model, pixels[0][i])
-        # normalize input vectors
-        in_encoder = Normalizer(norm='l2')
-        face_embedding = in_encoder.transform(face_embedding)
-        print(face_embedding.shape)
-        face_embeddings.append(face_embedding)
-    # predict
-    face_embeddings = asarray(face_embeddings)
-    print(face_embeddings.shape)
-    face_embeddings = np.squeeze(face_embeddings)
-    print(face_embeddings.shape)
+    if len(face_arrays) > 0:
+        for i in range(len(face_arrays)):
+            face_embedding = get_embedding(embedding_model, face_arrays[i])
+            # normalize input vectors
+            in_encoder = Normalizer(norm='l2')
+            face_embedding = in_encoder.transform(face_embedding)
+            print(face_embedding.shape)
+            face_embeddings.append(face_embedding)
+        # predict
+        face_embeddings = asarray(face_embeddings)
+        print(face_embeddings.shape)
 
-    predicted_classes = clf.predict(face_embeddings)
-    predicted_probas = clf.predict_proba(face_embeddings)
+        predicted_classes = clf.predict(face_embeddings)
+        predicted_probas = clf.predict_proba(face_embeddings)
 
-    # summarize
-    print("Klasse:")
-    print(predicted_classes)
-    print("Konfidenz:")
-    print(predicted_probas)
+        # summarize
+        print("Klasse:")
+        print(predicted_classes)
+        print("Konfidenz:")
+        print(predicted_probas)
 
-
-    # send_request(...current frame..., ...predicted_class...)
-
-    sleep(5)
+        sleep(2)
+        # for i in range(len(face_arrays)):
+        #   send_request(predicted_classes[i], base64.b64encode(face_arrays[i]))
