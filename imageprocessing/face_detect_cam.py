@@ -80,14 +80,15 @@ while True:
     if len(face_arrays) > 0:
         for i in range(len(face_arrays)):
             face_embedding = get_embedding(embedding_model, face_arrays[i])
-            # normalize input vectors
-            in_encoder = Normalizer(norm='l2')
-            face_embedding = in_encoder.transform(face_embedding)
             print(face_embedding.shape)
             face_embeddings.append(face_embedding)
         # predict
         face_embeddings = asarray(face_embeddings)
         print(face_embeddings.shape)
+
+        # normalize input vectors
+        in_encoder = Normalizer(norm='l2')
+        face_embeddings = in_encoder.transform(face_embeddings)
 
         predicted_classes = clf.predict(face_embeddings)
         predicted_probas = clf.predict_proba(face_embeddings)
