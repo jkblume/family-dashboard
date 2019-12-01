@@ -5,8 +5,8 @@ This dashboard should motivate the whole family to be more active/sportly and to
 ## Usage
 
 1. Run `docker-compose up -d` to start all services
-1. Navigate to http://localhost:81 into your browser (for frontend view)
-1. Navigate to http://localhost:8000/admin into your browser (for django server admin interface, user in dev mode: root with pw root1234)
+1. Change directory to imageprocessing. Start the face processing script: `python face_detect_cam.py`.
+1. Navigate to http://localhost:1024 into your browser to see incoming detected face events.
 
 ## 💻 Planned Features? 
 
