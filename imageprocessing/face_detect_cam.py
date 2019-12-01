@@ -14,6 +14,7 @@ from sklearn.svm import SVC
 from post_to_webservice import send_request
 from trainyourfacenet.download_model import download_model
 import base64
+from io import BytesIO
 
 #extract all faces from frame (or image in test scenario)
 def extract_face(image,required_size=(160,160)):
@@ -99,6 +100,9 @@ while True:
         print("Konfidenz:")
         print(predicted_probas)
 
+        for index, clazz in enumerate(predicted_classes):
+            buffered = BytesIO()
+            face_images[index].save(buffered, format="PNG")
+            send_request(str(clazz), base64.b64encode(buffered.getvalue()))
+
         sleep(2)
-        # for i in range(len(face_arrays)):
-        #   send_request(predicted_classes[i], base64.b64encode(face_arrays[i]))

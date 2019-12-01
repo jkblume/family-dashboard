@@ -3,7 +3,7 @@ services:
   frontend:
     build: frontend
     ports:
-    - "81:80"
+    - "1024:80"
   eventbus:
     build: eventbus
     ports:

@@ -13,22 +13,12 @@ logger = logging.getLogger(__name__)
 @api_view(["POST"])
 @renderer_classes((JSONRenderer,))
 def detected_person(request: Request) -> Response:
-    person_id = request.data.get("person_id")
-    try:
-        person = Person.objects.get(id=person_id)
-    except Person.DoesNotExist:
-        logger.error(f"can't find person for id {person_id}")
-        return Response(
-            status=404,
-            data={
-                "error": {
-                    "message": f"can't find person for id {person_id}",
-                    "code": "404",
-                }
-            },
-        )
-
-    event_payload = PayloadBuilder.build_detected_person_payload(person)
+    person_id = request.data.get("personId")
+    print(person_id)
+    person_image = request.data.get("personImage")
+    person = Person.objects.filter(id=person_id).first()
+    
+    event_payload = PayloadBuilder.build_detected_person_payload(person, person_image)
     Event.objects.create(type="detected_person", payload=event_payload)
 
     return Response(status=200)
