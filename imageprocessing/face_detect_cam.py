@@ -1,6 +1,5 @@
 import cv2
 import numpy as np
-from numpy import load
 from numpy import expand_dims
 from numpy import asarray
 from time import sleep
@@ -61,8 +60,8 @@ video_capture = cv2.VideoCapture(0)
 # load SVM and tf facenet model
 try:
     clf = load('trainyourfacenet/svm-clf-model.joblib')
-except:
-    print("Train your own model First")
+except Exception as e:
+    print(e)
 
 download_model()
 
