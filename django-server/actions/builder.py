@@ -15,4 +15,23 @@ class PayloadBuilder:
                     "first_name": person.first_name,
                 }
             })
-        return payload 
+        return payload
+
+    @staticmethod
+    def build_strava_activity_payload(person: Person) -> dict:
+        payload = {
+            "person": {
+                "id": "",
+                "last_name": "Unknown",
+                "first_name": "Person",
+            }
+        }
+        if person:
+            payload.update({
+                "person": {
+                    "id": person.id,
+                    "last_name": person.last_name,
+                    "first_name": person.first_name,
+                }
+            })
+        return payload

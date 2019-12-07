@@ -8,7 +8,7 @@ SECRET_KEY = "k5p8sr1n@m)$!51%ufs4au2t#letta+8$p8_$3i-!65khb2k0e"
 
 DEBUG = True
 
-ALLOWED_HOSTS = []
+ALLOWED_HOSTS = ["*"]
 
 INSTALLED_APPS = [
     "django.contrib.admin",
@@ -125,3 +125,5 @@ LOGGING = {
         "django": {"handlers": ["console"], "level": "INFO", "propagate": False},
     },
 }
+
+STRAVA_WEBHOOK_VERIFY_TOKEN = "ef981c9c-80d0-4ac4-aef9-755306d76b44"
