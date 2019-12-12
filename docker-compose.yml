@@ -26,3 +26,8 @@ services:
       POSTGRES_USER: admin
       POSTGRES_PASSWORD: admin
       POSTGRES_DB: db
+    volumes:
+    - db-data:/var/lib/postgresql/data
+  
+volumes:
+  db-data:
