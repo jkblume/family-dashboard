@@ -4,9 +4,10 @@ This dashboard should motivate the whole family to be more active/sportly and to
 
 ## Usage
 
-1. Run `docker-compose up -d` to start all services
+1. Run `docker-compose up -d` to start all services (except frontend)
+1. Start dashboard frontend with `npm run serve`
 1. Change directory to imageprocessing. Start the face processing script: `python face_detect_cam.py`.
-1. Navigate to http://localhost:1024 into your browser to see incoming detected face events.
+1. Navigate to http://localhost:1024 into your browser to open the dashboard.
 
 ## 💻 Planned Features? 
 
