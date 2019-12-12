@@ -2,7 +2,7 @@
   <div>
       <h1> Was passiert so? </h1>
 	  <span v-if="persons.length != 0">
-	  		{{persons.person}} kam Nachhause um {{persons.Timestamp}}
+	  		{{persons.first_name}} kam Nachhause um {{persons.Timestamp}}
 		</span>
 	   </div>
   </div>

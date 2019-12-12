@@ -2,7 +2,7 @@
   <div>
       <h1 class="heading">Hallo und Willkommen!</h1>
       <div class="heading" v-for="person in camFeed">
-        {{person.person}} !!!
+          {{person.first_name}}
         <img class="responsive" v-bind:src="'data:image/png;base64,' + toImage(person.image)" />
         <button @click="$emit('pass-on', addTimestamp(person))">Das bin ich!</button>
       </div>
@@ -47,7 +47,7 @@ export default {
             this.socket = io(this.eventBusUrl);
             this.socket.on(`notifications_server`, function(data) {
                 let json = JSON.parse(data);
-                console.log(json);
+                // console.log(json);
                 this.camFeed.unshift(json);
             }.bind(this));
         },

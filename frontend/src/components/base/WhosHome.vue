@@ -11,7 +11,11 @@
 export default {
 	name: "whos-home",
 	props: ["persons"],
-
+  data() {
+        return {
+            whoIsHome: []
+        }
+  }
 	methods: {
 		toImage: function(string) {
             string = string.replace(/\r\n/g,"\n");
