@@ -1,9 +1,5 @@
 version: '3'
 services:
-  frontend:
-    build: frontend
-    ports:
-    - "1024:80"
   eventbus:
     build: eventbus
     ports:
