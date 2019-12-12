@@ -1,17 +1,15 @@
 <template>
   <div id="app">
-    <base-layout>
-      <router-view :key="this.$route.fullPath" />
-    </base-layout>
+    <dashboard />
   </div>
 </template>
 
 <script>
-import BaseLayout from "@/components/base/BaseLayout";
+import Dashboard from "@/views/Dashboard";
 
 export default {
   components: {
-    BaseLayout,
+    Dashboard,
   },
 };
 </script>

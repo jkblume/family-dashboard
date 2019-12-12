@@ -15,7 +15,8 @@
     "vue": "^2.6.10",
     "vue-router": "^3.0.3",
     "vue-template-compiler": "^2.6.10",
-    "socket.io-client": "^2.3.0"
+    "socket.io-client": "^2.3.0",
+    "moment": "^2.24.0"
   },
   "devDependencies": {
     "@vue/cli-plugin-babel": "^3.10.0",
