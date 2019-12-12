@@ -1,10 +1,13 @@
 <template>
   <div>
     <h1> Wer ist Zuhause? </h1>
-	<span v-if="persons.length != 0">
-	   <img class="responsive" v-bind:src="'data:image/png;base64,' + toImage(persons.image)" />
-	</span>
-  </div>
+      <span v-if="persons.length != 0">
+        {{addNewImage(persons)}}
+      </span>
+      <span class="heading" v-for="person in whoIsHome">
+        <img class="responsive" v-bind:src="'data:image/png;base64,' + toImage(person.image)" />
+      </span>
+    </div>
 </template>
 
 <script>
@@ -15,8 +18,12 @@ export default {
         return {
             whoIsHome: []
         }
-  }
+  },
 	methods: {
+    addNewImage: function (person) {
+            this.whoIsHome.unshift(person)
+            this.persons = []
+    },
 		toImage: function(string) {
             string = string.replace(/\r\n/g,"\n");
             var utftext = "";
