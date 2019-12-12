@@ -10,7 +10,7 @@ dj-database-url = "*"
 dj-static = "*"
 gunicorn = "*"
 psycopg2-binary = "*"
-django-redis = "*"
+django-redis = {editable = true,git = "https://github.com/niwinz/django-redis.git"}
 djangorestframework = "*"
 
 [dev-packages]
