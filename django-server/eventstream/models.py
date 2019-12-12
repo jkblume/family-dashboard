@@ -5,15 +5,11 @@ from django.utils import timezone
 
 
 class Event(models.Model):
-
     class EventType(models.TextChoices):
-        STRAVA_ACTIVITY = 'STRAVA_ACTIVITY'
-        DETECTED_FACE = 'DETECTED_FACE'
+        STRAVA_ACTIVITY = "STRAVA_ACTIVITY"
+        DETECTED_FACE = "DETECTED_FACE"
 
-    event_type = models.CharField(
-        max_length=64,
-        choices=EventType.choices,
-    )
+    event_type = models.CharField(max_length=64, choices=EventType.choices)
     payload = JSONField()
     created = models.DateTimeField(default=timezone.now)
 

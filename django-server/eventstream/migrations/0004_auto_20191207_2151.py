@@ -5,19 +5,21 @@ from django.db import migrations, models
 
 class Migration(migrations.Migration):
 
-    dependencies = [
-        ('eventstream', '0003_auto_20191120_1549'),
-    ]
+    dependencies = [("eventstream", "0003_auto_20191120_1549")]
 
     operations = [
-        migrations.RemoveField(
-            model_name='event',
-            name='type',
-        ),
+        migrations.RemoveField(model_name="event", name="type"),
         migrations.AddField(
-            model_name='event',
-            name='event_type',
-            field=models.CharField(choices=[('STRAVA_ACTIVITY', 'Strava Activity'), ('DETECTED_FACE', 'Detected Face')], default='DETECTED_FACE', max_length=64),
+            model_name="event",
+            name="event_type",
+            field=models.CharField(
+                choices=[
+                    ("STRAVA_ACTIVITY", "Strava Activity"),
+                    ("DETECTED_FACE", "Detected Face"),
+                ],
+                default="DETECTED_FACE",
+                max_length=64,
+            ),
             preserve_default=False,
         ),
     ]

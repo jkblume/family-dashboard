@@ -6,21 +6,36 @@ import django.db.models.deletion
 
 class Migration(migrations.Migration):
 
-    dependencies = [
-        ('actions', '0001_initial'),
-    ]
+    dependencies = [("actions", "0001_initial")]
 
     operations = [
         migrations.CreateModel(
-            name='AppPerson',
+            name="AppPerson",
             fields=[
-                ('id', models.AutoField(auto_created=True, primary_key=True, serialize=False, verbose_name='ID')),
-                ('app', models.CharField(choices=[('STRAVA', 'Strava'), ('DETECT_FACE', 'Detect Face')], max_length=64)),
-                ('app_specific_id', models.CharField(max_length=255)),
-                ('person', models.ForeignKey(on_delete=django.db.models.deletion.PROTECT, to='actions.Person')),
+                (
+                    "id",
+                    models.AutoField(
+                        auto_created=True,
+                        primary_key=True,
+                        serialize=False,
+                        verbose_name="ID",
+                    ),
+                ),
+                (
+                    "app",
+                    models.CharField(
+                        choices=[("STRAVA", "Strava"), ("DETECT_FACE", "Detect Face")],
+                        max_length=64,
+                    ),
+                ),
+                ("app_specific_id", models.CharField(max_length=255)),
+                (
+                    "person",
+                    models.ForeignKey(
+                        on_delete=django.db.models.deletion.PROTECT, to="actions.Person"
+                    ),
+                ),
             ],
-            options={
-                'unique_together': {('app', 'app_specific_id')},
-            },
-        ),
+            options={"unique_together": {("app", "app_specific_id")}},
+        )
     ]

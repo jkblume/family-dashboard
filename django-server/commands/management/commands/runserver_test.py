@@ -3,7 +3,7 @@ from django.contrib.staticfiles.management.commands import runserver
 
 def setup_test_data():
     from django.contrib.auth.models import User
-    
+
     username = "root"
     if not User.objects.filter(username=options[username]).exists():
         User.objects.create_superuser(
@@ -20,6 +20,7 @@ class Command(runserver.Command):
 
     def run(self, **options):
         from django.core.management import call_command
+
         call_command("migrate")
         setup_test_data()
         super().run(**options)
