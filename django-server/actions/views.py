@@ -8,7 +8,7 @@ from rest_framework.response import Response
 from rest_framework.views import APIView
 
 from actions.builder import PayloadBuilder
-from actions.models import Person, AppPerson
+from actions.models import AppPerson
 from eventstream.models import Event
 
 logger = logging.getLogger(__name__)
@@ -36,6 +36,7 @@ class StravaWebhookApiView(APIView):
     renderer_classes = [JSONRenderer]
 
     def post(self, request: Request, format=None) -> Response:
+        logger.info(request.data)
         strava_webhook_event_data = request.data
 
         # check data for being a "created activity event"

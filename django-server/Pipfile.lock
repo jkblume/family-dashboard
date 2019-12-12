@@ -1,7 +1,7 @@
 {
     "_meta": {
         "hash": {
-            "sha256": "d62aafe7e2830c41c94eea4286f45d4b0ad3b484fe2f57294415c1bf0155da9b"
+            "sha256": "3c45db8cbad1cb1f671b64f551d8bb54ed844ddfff8abaa2ef443ed882aef725"
         },
         "pipfile-spec": 6,
         "requires": {},
@@ -45,12 +45,9 @@
             "version": "==3.0"
         },
         "django-redis": {
-            "hashes": [
-                "sha256:af0b393864e91228dd30d8c85b5c44d670b5524cb161b7f9e41acc98b6e5ace7",
-                "sha256:f46115577063d00a890867c6964ba096057f07cb756e78e0503b89cd18e4e083"
-            ],
-            "index": "pypi",
-            "version": "==4.10.0"
+            "editable": true,
+            "git": "https://github.com/niwinz/django-redis.git",
+            "ref": "8ebf858a1e921e90e70b647acded053159821143"
         },
         "djangorestframework": {
             "hashes": [
