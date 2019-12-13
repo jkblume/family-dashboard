@@ -4,5 +4,5 @@ class ResponseDataBuilder:
         return {"error": {"message": error_message, "code": error_code}}
 
     @staticmethod
-    def build_success_response(data: dict) -> dict:
+    def build_success_response(data: any) -> dict:
         return {"data": data}
