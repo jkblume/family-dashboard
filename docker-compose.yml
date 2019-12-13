@@ -11,6 +11,8 @@ services:
     ports:
     - "8000:8000"
     command: 'make run_dev'
+    volumes:
+    - ./django-server:/app
     environment:
       DATABASE_URL: "postgres://admin:admin@postgres:5432/db"
       CACHE_URL: "redis://redis:6379/1"
