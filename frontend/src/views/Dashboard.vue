@@ -31,7 +31,7 @@
         },
         data() {
             return {
-                activityEventsResult: services.djangoServerService.getEvents(),
+                activityEventsResult: [], //services.djangoServerService.getEvents(),
                 activityEvents: [],
                 socket: services.socketIoService.getActivityNotificationSocket(),
             }

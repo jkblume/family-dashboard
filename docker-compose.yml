@@ -6,6 +6,8 @@ services:
     - "8080:8080"
     environment:
       REDIS_URL: "redis://redis:6379/1"
+    depends_on:
+    - redis
   djangoserver:
     build: django-server
     ports:
