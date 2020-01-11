@@ -36,40 +36,28 @@ def detected_person(request: Request) -> Response:
     return Response(status=200)
 
 
-class StravaWebhookApiView(APIView):
-    renderer_classes = [JSONRenderer]
+@api_view(["POST"])
+@renderer_classes((JSONRenderer,))
+def strava_activity(request: Request) -> Response:
+    logger.info(request.data)
+    strava_webhook_event_data = request.data
 
-    def post(self, request: Request, format=None) -> Response:
-        logger.info(request.data)
-        strava_webhook_event_data = request.data
-
-        # check data for being a "created activity event"
-        if strava_webhook_event_data.get("aspect_type") != "create":
-            return Response(status=200)
-
-        strave_athlete_id = str(strava_webhook_event_data.get("owner_id"))
-        app_person = AppPerson.objects.filter(
-            app=AppPerson.App.STRAVA, app_specific_id=strave_athlete_id
-        ).first()
-
-        person = None
-        if app_person is not None:
-            person = app_person.person
-
-        event_payload = PayloadBuilder.build_strava_activity_payload(person)
-        Event.objects.create(
-            event_type=Event.EventType.STRAVA_ACTIVITY, payload=event_payload
-        )
-
+    # check data for being a "created activity event"
+    if strava_webhook_event_data.get("aspect_type") != "create":
         return Response(status=200)
 
-    def get(self, request: Request, format=None) -> Response:
-        mode = request.query_params.get("hub.mode")
-        token = request.query_params.get("hub.verify_token")
-        challenge = request.query_params.get("hub.challenge")
+    strave_athlete_id = str(strava_webhook_event_data.get("owner_id"))
+    app_person = AppPerson.objects.filter(
+        app=AppPerson.App.STRAVA, app_specific_id=strave_athlete_id
+    ).first()
 
-        if mode != "subscribe" or token != settings.STRAVA_WEBHOOK_VERIFY_TOKEN:
-            return Response(status=403)
+    person = None
+    if app_person is not None:
+        person = app_person.person
 
-        logger.info("WEBHOOK VERIFIED")
-        return Response(data={"hub.challenge": challenge}, status=200)
+    event_payload = PayloadBuilder.build_strava_activity_payload(person)
+    Event.objects.create(
+        event_type=Event.EventType.STRAVA_ACTIVITY, payload=event_payload
+    )
+
+    return Response(status=200)

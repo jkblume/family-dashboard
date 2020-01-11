@@ -6,8 +6,8 @@ logger.setLevel(logging.INFO)
 
 STRAVA_WEBHOOK_TOKEN = "ef981c9c-80d0-4ac4-aef9-755306d76b44"
 REGISTERED_DASHBOARDS_URLS = [
-    "http://familydashboard.ddnss.org:8000/strava/webhook",
-    "http://jarlmax.ddnss.org:8000/strava/webhook",
+    "http://familydashboard.ddnss.org:8000/api/strava_activity",
+    "http://jarlmax.ddnss.org:8000/api/strava_activity",
 ]
 
 def lambda_handler(event, context):
