@@ -14,18 +14,18 @@ This dashboard should motivate the whole family to be more active/sportly and to
 Be warned: Traffic is currently transfered over http (not encrypted) and you are opening port 8000 to the internet.
 
 1. You need to create a DynDNS Entry (https://ddnss.de/) to get a static IP
-  1. Jakob: familydashboard.ddnss.org
-  1. Max: jarlmax.ddnss.org
+    1. Jakob: familydashboard.ddnss.org
+    1. Max: jarlmax.ddnss.org
 1. Open your FritzBox UI in browser and route to: Internet > Freigaben > DynDNS
-  1. Enter your data like in the following screenshot. Get the update link from the actions provided on https://ddnss.de/ua/vhosts_list.php ![Fritzbox DynDNS Configuration](/docs/fritzbox-dyndns.png?raw=true "Fritzbox")
+    1. Enter your data like in the following screenshot. Get the update link from the actions provided on https://ddnss.de/ua/vhosts_list.php ![Fritzbox DynDNS Configuration](/docs/fritzbox-dyndns.png?raw=true "Fritzbox")
 1. You have to also provide a "Portfreigaben" in your fritzbox, to route incoming traffic from your fritzbox to the device that is running the djangoserver. 
-  1. Route to Internet > Freigaben > Portfreigaben and press "Gerät für Freigabe hinzufügen"
-  1. Select your device, where the django server is currently running.
-  1. Press "Neue Freigabe" and use the configuration: "Protokoll": TCP, "Port an Gerät": 8000 to 8000, "Port extern  gewünscht": 8000
-  1. Save it!
+    1. Route to Internet > Freigaben > Portfreigaben and press "Gerät für Freigabe hinzufügen"
+    1. Select your device, where the django server is currently running.
+    1. Press "Neue Freigabe" and use the configuration: "Protokoll": TCP, "Port an Gerät": 8000 to 8000, "Port extern  gewünscht": 8000
+    1. Save it!
 1. Check if requests are routed to your django server:
-  1. Execute in shell: `curl http://jarlmax.ddnss.org:8000/`
-  1. You should get a response from django server and see a log entry in django server logs if everything works.
+    1. Execute in shell: `curl http://jarlmax.ddnss.org:8000/`
+    1. You should get a response from django server and see a log entry in django server logs if everything works.
 
 ## 💻 Planned Features? 
 
