@@ -9,6 +9,8 @@ This dashboard should motivate the whole family to be more active/sportly and to
 1. Change directory to imageprocessing. Start the face processing script: `python face_detect_cam.py`.
 1. Navigate to http://localhost:1024 into your browser to open the dashboard.
 
+--> to change frontend from debug to prod mode; change main.js django and socketIo stub svc to real data (both true to false)
+
 ## Infrastructure Setup
 
 Be warned: Traffic is currently transfered over http (not encrypted) and you are opening port 8000 to the internet.

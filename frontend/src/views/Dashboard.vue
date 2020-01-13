@@ -7,6 +7,7 @@
                         <activity-feed :activity-events="activityEvents"/>
                     </div>
                     <div class="col-6">
+                        <center :activity-events="activityEvents"/>
                     </div>
                     <div class="col-3">
                         <who-is-home :activity-events="activityEvents"/>
@@ -20,6 +21,7 @@
 <script>
     import ActivityFeed from "../components/dashboard/ActivityFeed";
     import WhoIsHome from "../components/dashboard/WhoIsHome";
+    import Center from "../components/dashboard/Center";
     import io from 'socket.io-client';
     import { services } from "@/main";
 
@@ -28,6 +30,7 @@
         components: {
             ActivityFeed,
             WhoIsHome,
+            Center,
         },
         data() {
             return {

@@ -8,8 +8,8 @@ Vue.config.productionTip = false;
 
 export const services = new Vue({
   data() {
-    const djangoServerService = new DjangoServerService(true, 'http://localhost:8000');
-    const socketIoService = new SocketIoService(true, 'http://localhost:8080');
+    const djangoServerService = new DjangoServerService(false, 'http://localhost:8000');
+    const socketIoService = new SocketIoService(false, 'http://localhost:8080');
 
     return {
       djangoServerService,

@@ -24,7 +24,7 @@
                     moment.locale('de');
                     let time = moment(activity.timestamp).fromNow();
                     let person = ((activity.person) ? activity.person.name : "Unbekannte Person");
-                    return `<b>${person}</b> ist <b>${time}</b> nach Hause gekommen.`
+                    return `<b>${person}</b> ist <b>${time}</b> vorbei gekommen.`
                 }
                 if (activity.activityType === 'STRAVA_ACTIVITY') {
                     moment.locale('de');
