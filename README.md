@@ -61,5 +61,6 @@ Technologies, that will take place in this project:
 - PostgresQL (Database)
 - Redis (Key/Value Store, Ephemeral database for event stream between backend services)
 - Docker (Application Packaging/Runtime)
+- Tensorflow & ScitKit for face recognition and classification
 Eventually:
 - Kubernetes (Orchestration to handle the massive load, that comes from the family members ;) )
