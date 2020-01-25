@@ -18,6 +18,22 @@ services:
     environment:
       DATABASE_URL: "postgres://admin:admin@postgres:5432/db"
       CACHE_URL: "redis://redis:6379/1"
+    depends_on:
+    - redis
+    - postgres
+  djangoserver-worker:
+    build: django-server
+    command: 'make run_worker'
+    volumes:
+    - ./django-server:/app
+    environment:
+      DATABASE_URL: "postgres://admin:admin@postgres:5432/db"
+      CACHE_URL: "redis://redis:6379/1"
+      STRAVA_SECRET: ""
+    depends_on:
+    - redis
+    - postgres
+    - djangoserver
   redis:
     image: redis
   postgres:

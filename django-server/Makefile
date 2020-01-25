@@ -8,3 +8,6 @@ run:
 	pipenv run gunicorn project.wsgi --workers 5 -b 0.0.0.0:8000 -t 600 --access-logfile - --error-logfile -
 run_dev:
 	pipenv run python manage.py runserver_test 0.0.0.0:8000
+
+run_worker:
+	pipenv run python manage.py runworker

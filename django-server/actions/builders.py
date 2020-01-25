@@ -3,7 +3,7 @@ from actions.models import Person
 
 class PayloadBuilder:
     @staticmethod
-    def build_detected_person_payload(person: Person, image: str) -> dict:
+    def build_detected_person_frontend_payload(person: Person, image: str) -> dict:
         payload = {"data": {"image": image}, "activityType": "DETECTED_PERSON"}
         if person:
             payload.update(
@@ -17,7 +17,7 @@ class PayloadBuilder:
         return payload
 
     @staticmethod
-    def build_strava_activity_payload(person: Person) -> dict:
+    def build_strava_activity_frontend_payload(person: Person) -> dict:
         payload = {"activityType": "STRAVA_ACTIVITY"}
         if person:
             payload.update(

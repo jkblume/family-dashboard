@@ -12,6 +12,7 @@ gunicorn = "*"
 psycopg2-binary = "*"
 django-redis = {editable = true,git = "https://github.com/niwinz/django-redis.git"}
 djangorestframework = "*"
+requests = "*"
 
 [dev-packages]
 black = "==19.3b0"
