@@ -25,3 +25,23 @@ class AppPerson(models.Model):
 
     def __str__(self):
         return f"{self.person.id} with app {self.app} id {self.app_specific_id}"
+
+
+class StravaAthlete(models.Model):
+    athlete_id = models.CharField(max_length=255, unique=True)
+    scope = models.CharField(max_length=255)
+    access_token = models.CharField(max_length=255)
+    refresh_token = models.CharField(max_length=255)
+    expires_at = models.PositiveIntegerField()
+
+    def __str__(self):
+        return f"{self.athlete_id}"
+
+
+class StravaActivity(models.Model):
+    strava_athlete = models.ForeignKey(to="StravaAthlete", on_delete=models.PROTECT)
+    activity_id = models.CharField(max_length=255, unique=True)
+    start_date = models.DateTimeField()
+
+    def __str__(self):
+        return f"{self.activity_id}"
