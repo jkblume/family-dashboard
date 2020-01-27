@@ -1,43 +1,27 @@
 <template>
     <div>
-        <h3 class="heading">Wer ist @home?</h3>
-        <span class="heading" v-for="person in whoIsHome">
-            <img class="responsive" :src="'data:image/png;base64,' + toImage(person.data.image)"/>
-        </span>
+        <div v-if="lastEvent && lastEvent.activityType === 'DETECTED_PERSON'">
+            <div class="activity-message" v-html="getWelcomeMessage(lastEvent)"></div>
+            <img class="responsive" :src="'data:image/png;base64,' + toImage(lastEvent.data.image)"/>
+        </div>
     </div>
 </template>
 
 <script>
+    import moment from "moment"
+
     export default {
-        name: "who-is-home",
+        name: "dashboard-center",
         props: {
-            activityEvents: {
-                type: Array,
-                default: () => ([]),
+            lastEvent: {
+                type: Object,
+                default: () => ({}),
             },
         },
         data() {
-            return {
-                whoIsHome: []
-            }
+            return {}
         },
-        watch: {
-          "activityEvents": function () {
-              for (let activityEvent of this.activityEvents) {
-                  if (activityEvent.activityType !== "DETECTED_PERSON") {
-                      continue;
-                  }
-                  let found = false;
-                  for(let i = 0; i < this.whoIsHome.length; i++) {
-                      if (this.whoIsHome[i].person.name === activityEvent.person.name) {
-                          found = true;
-                          break;
-                      }
-                  }
-                  if (!found) {this.whoIsHome.push(activityEvent)}
-              }
-          },
-        },
+        computed: {},
         methods: {
             toImage: function (string) {
                 string = string.replace(/\r\n/g, "\n");
@@ -61,19 +45,30 @@
                 }
 
                 return utftext;
-            }
+            },
+            getWelcomeMessage: function (activity) {
+                console.log(activity.person.name)
+                moment.locale('de');
+                let time = moment(activity.timestamp).fromNow();
+                let person = ((activity.person) ? activity.person.name : "Unbekannte Person");
+                return `Schön, dich zu sehen, <b>${person}</b>`
+            },
         }
     };
 </script>
 
 <style lang="scss" scoped>
     .responsive {
-        width: 30%;
         height: auto;
+        display: block;
+        margin-left: auto;
+        margin-right: auto;
+        width: 80%;
     }
 
-    .heading {
+    .activity-message {
         text-align: center;
+        font-size: 0.9rem;
     }
 
 </style>

@@ -1,4 +1,4 @@
-import { image1 } from "../StubFixtures.js";
+import { image1, image2 } from "../StubFixtures.js";
 
 
 export default class SocketStub {
@@ -49,6 +49,15 @@ export class SocketIoServiceStub {
             timestamp: new Date().setHours(now.getHours() - 2),
             data: {
                 image: image1
+            }
+        }, {
+            activityType: 'DETECTED_PERSON',
+            person: {
+                name: "Scarlett Johansson",
+            },
+            timestamp: new Date().setHours(now.getHours() - 3),
+            data: {
+                image: image2
             }
         }];
         setInterval(function () {

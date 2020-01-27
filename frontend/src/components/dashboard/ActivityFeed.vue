@@ -1,8 +1,10 @@
 <template>
     <div>
-        <h1> Was passiert so? </h1>
-        <div v-for="activity in activityEvents">
-            <div class="activity-message" v-html="getActivityMessage(activity)"></div>
+        <h3 class="heading">Feed</h3>
+        <div class="activity-message alert alert-success" v-for="activity in activityEvents">
+            <h4 class="alert-heading">{{getActivityTitle(activity)}}</h4>
+            <hr>
+            <p>{{getActivityMessage(activity)}}</p>
         </div>
     </div>
 </template>
@@ -15,7 +17,7 @@
         props: {
             activityEvents: {
                 type: Array,
-                default: [],
+                default: () => ([]),
             },
         },
         methods: {
@@ -24,13 +26,21 @@
                     moment.locale('de');
                     let time = moment(activity.timestamp).fromNow();
                     let person = ((activity.person) ? activity.person.name : "Unbekannte Person");
-                    return `<b>${person}</b> ist <b>${time}</b> vorbei gekommen.`
+                    return `${person} ist ${time} vorbei gekommen.`
                 }
                 if (activity.activityType === 'STRAVA_ACTIVITY') {
                     moment.locale('de');
                     let time = moment(activity.timestamp).fromNow();
                     let person = ((activity.person) ? activity.person.name : "Unbekannte Person");
-                    return `<b>${person}</b> hat <b>${time}</b> Sport gemacht.`
+                    return `${person} hat ${time} Sport gemacht.`
+                }
+            },
+            getActivityTitle: function (activity) {
+                if (activity.activityType === 'DETECTED_PERSON') {
+                    return "Wer ist denn da?"
+                }
+                if (activity.activityType === 'STRAVA_ACTIVITY') {
+                    return "Sport Frei!"
                 }
             }
         }
@@ -40,5 +50,9 @@
 <style lang="scss" scoped>
     .activity-message {
         font-size: 0.9rem;
+    }
+
+    .heading {
+        text-align: center;
     }
 </style>

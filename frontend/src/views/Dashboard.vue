@@ -7,7 +7,7 @@
                         <activity-feed :activity-events="activityEvents"/>
                     </div>
                     <div class="col-6">
-                        <center :activity-events="activityEvents"/>
+                        <dashboard-center :last-event="lastEvent"/>
                     </div>
                     <div class="col-3">
                         <who-is-home :activity-events="activityEvents"/>
@@ -21,7 +21,7 @@
 <script>
     import ActivityFeed from "../components/dashboard/ActivityFeed";
     import WhoIsHome from "../components/dashboard/WhoIsHome";
-    import Center from "../components/dashboard/Center";
+    import DashboardCenter from "../components/dashboard/DashboardCenter";
     import io from 'socket.io-client';
     import { services } from "@/main";
 
@@ -30,7 +30,7 @@
         components: {
             ActivityFeed,
             WhoIsHome,
-            Center,
+            DashboardCenter,
         },
         data() {
             return {
@@ -48,10 +48,19 @@
               this.activityEvents = this.activityEventsResult.apiData;
           },
         },
+        computed: {
+            lastEvent() {
+                if (this.activityEvents.length === 0) {
+                    return null;
+                }
+                return this.activityEvents[0]
+            }
+        },
         mounted() {
             this.socket.on('notifications_server', function(data) {
                 let json = JSON.parse(data);
                 this.activityEvents.unshift(json);
+                this.activityEvents = this.activityEvents.slice(0, 4);
             }.bind(this));
         },
         methods: {
