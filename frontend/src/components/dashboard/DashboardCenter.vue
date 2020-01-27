@@ -47,7 +47,6 @@
                 return utftext;
             },
             getWelcomeMessage: function (activity) {
-                console.log(activity.person.name)
                 moment.locale('de');
                 let time = moment(activity.timestamp).fromNow();
                 let person = ((activity.person) ? activity.person.name : "Unbekannte Person");
