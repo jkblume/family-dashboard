@@ -11,6 +11,22 @@ This dashboard should motivate the whole family to be more active/sportly and to
 
 --> to change frontend from debug to prod mode; change main.js django and socketIo stub svc to real data (both true to false)
 
+## Connect Django Server with Strava
+
+This steps has do be done for every new athelete you want to retrieve events for. 
+This process is pretty manual so far and is very annoying because of the secret management. 
+We should refactor this this to an automatic process of "Adding new athletes to your dashboard".
+This can be done on django server (as it is already our admin console).
+
+1. Open on browser: https://www.strava.com/oauth/authorize?client_id=26790&response_type=code&redirect_uri=http://localhost/exchange_token&approval_prompt=auto&scope=activity:read 
+1. Authorize the "Family Dashboard" app.
+1. You gets redirected to an url similar to this one: http://localhost/exchange_token?state=&code=#your_code#&scope=read,activity:read
+1. Copy over #your_code# and save it on clipboard.
+1. Call on bash `curl -X POST https://www.strava.com/api/v3/oauth/token -d client_id=26790 -d client_secret=#client_secret# -d code=#copy_code_from_clipboard# -d grant_type=authorization_code`
+1. You get a json response. Save the following information while creating a new StravaAthlete in your django server admin (http://localhost:8000/admin/actions/stravaathlete/add/) 
+![Mapping JSON to StravaAthlete](/docs/img/json-stravaathlete.png?raw=true "Mapping JSON to StravaAthlete")
+1. Afterwards you should receive events for the added strava athlete.
+
 ## 💻 Planned Features? 
 
 - Stats

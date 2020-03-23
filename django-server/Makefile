@@ -10,4 +10,5 @@ run_dev:
 	pipenv run python manage.py runserver_test 0.0.0.0:8000
 
 run_worker:
+	pipenv run python manage.py migrate --noinput
 	pipenv run python manage.py runworker

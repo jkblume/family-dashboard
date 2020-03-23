@@ -29,7 +29,7 @@ class AppPerson(models.Model):
 
 class StravaAthlete(models.Model):
     athlete_id = models.CharField(max_length=255, unique=True)
-    scope = models.CharField(max_length=255)
+    scope = models.CharField(max_length=255, blank=True)
     access_token = models.CharField(max_length=255)
     refresh_token = models.CharField(max_length=255)
     expires_at = models.PositiveIntegerField()

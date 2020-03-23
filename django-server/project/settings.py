@@ -55,7 +55,7 @@ WSGI_APPLICATION = "project.wsgi.application"
 import dj_database_url
 
 default_database_url = os.getenv(
-    "DATABASE_URL", "postgres://admin:admin@localhost:54321/db"
+    "DATABASE_URL", "postgres://admin:admin@localhost:5432/db"
 )
 
 DATABASES = {"default": dj_database_url.parse(default_database_url)}
