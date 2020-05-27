@@ -1,6 +1,6 @@
 # Family Dashboard
 
-This dashboard should motivate the whole family to be more active/sportly and to live a digital life. But in respect to privacy and data that exist as long as you want!
+This dashboard should motivate the whole family to be more active/sportly and to live a digital life. But in respect to privacy and data that exist as long as you want!!
 
 ## Usage
 
