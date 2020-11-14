@@ -3,3 +3,4 @@ client_secret.json
 *.log
 *.token
 __pycache__
+athletes.json

@@ -2,6 +2,7 @@ from datetime import datetime
 import logging
 import time
 import requests
+import json
 import os
 from post_to_webservice import send_post_event_request
 
@@ -11,17 +12,9 @@ POLLING_INTERVAL = int(os.getenv("POLL_INTERVAL", 5))
 STRAVA_CLIENT_ID = os.getenv("STRAVA_CLIENT_ID")
 STRAVA_CLIENT_SECRET = os.getenv("STRAVA_CLIENT_SECRET")
 
-STRAVA_ATHLETES = [
-    {
-        "athlete_id": "14096134",
-        "person_id": "JAKBLU",
-        "person_name": "Jakob",
-        "expires_at": 1605322567,
-        "access_token": "b37d2655ff8708d2c5cfb85c94b488f38bf9ea49",
-        "refresh_token": "a0cb279ac95e95476b54e058d1a23d1be57fae2c",
-        "activities": []
-    }
-]
+STRAVA_ATHLETES = []
+with open("athletes.json", "r") as file:
+    STRAVA_ATHLETES = json.loads(file.read())
 
 def get_access_token(strava_athlete: dict) -> str:
     if datetime.fromtimestamp(strava_athlete.get("expires_at")) > datetime.now():
@@ -41,6 +34,9 @@ def get_access_token(strava_athlete: dict) -> str:
     strava_athlete["expires_at"] = response_data.get("expires_at")
     print(f"Refreshed access token for athlete {strava_athlete.get('athlete_id')}")
     
+    with open("athletes.json", "w") as file:
+        file.write(json.dumps(STRAVA_ATHLETES))
+
     return strava_athlete.get("access_token")
 
 def poll_strava_activities():
@@ -66,6 +62,11 @@ def poll_strava_activities():
             activity_id = str(activity.get("id"))
             if next((item for item in activities if item["activity_id"] == activity_id), None):
                 continue
+
+            activities.append(activity)
+
+            with open("athletes.json", "w") as file:
+                file.write(json.dumps(STRAVA_ATHLETES))
             
             payload = {
                 "person": {
