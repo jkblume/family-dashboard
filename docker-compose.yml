@@ -21,19 +21,19 @@ services:
     depends_on:
     - redis
     - postgres
-  djangoserver-worker:
-    build: django-server
-    command: 'make run_worker'
-    volumes:
-    - ./django-server:/app
+  stravapolling:
+    build: stravapolling
+    environment:
+      DJANGO_SERVER_HOST_API_URL: "http://djangoserver:8000"
     env_file:
       - secrets.env
-    environment:
-      DATABASE_URL: "postgres://admin:admin@postgres:5432/db"
-      CACHE_URL: "redis://redis:6379/1"
     depends_on:
-    - redis
-    - postgres
+    - djangoserver
+  randomphoto:
+    build: randomphoto
+    environment:
+      DJANGO_SERVER_HOST_API_URL: "http://djangoserver:8000"
+    depends_on:
     - djangoserver
   redis:
     image: redis

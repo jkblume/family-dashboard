@@ -6,9 +6,10 @@ This dashboard should motivate the whole family to be more active/sportly and to
 ## Usage
 
 1. Run `docker-compose up -d` to start all services (except frontend)
-1. Start dashboard frontend with `npm run serve`
-1. Change directory to imageprocessing. Start the face processing script: `python face_detect_cam.py`.
+1. Enter `frontend` directory and start dashboard frontend with `npm run serve`
+1. (Optional) Enter `imageprocessing` directory and start the face processing script: `python face_detect_cam.py`.
 1. Navigate to http://localhost:1024 into your browser to open the dashboard.
+1. To log into django admin backend navigate to http://localhost:8000/admin and use the credentials: `root:root1234`
 
 --> to change frontend from debug to prod mode; change main.js django and socketIo stub svc to real data (both true to false)
 
@@ -24,8 +25,7 @@ This can be done on django server (as it is already our admin console).
 1. You gets redirected to an url similar to this one: http://localhost/exchange_token?state=&code=#your_code#&scope=read,activity:read
 1. Copy over #your_code# and save it on clipboard.
 1. Call on bash `curl -X POST https://www.strava.com/api/v3/oauth/token -d client_id=26790 -d client_secret=#client_secret# -d code=#copy_code_from_clipboard# -d grant_type=authorization_code`
-1. You get a json response. Save the following information while creating a new StravaAthlete in your django server admin (http://localhost:8000/admin/actions/stravaathlete/add/) 
-![Mapping JSON to StravaAthlete](/docs/img/json-stravaathlete.png?raw=true "Mapping JSON to StravaAthlete")
+1. You get a json response. Fill in the required information for an athlete (checkout stravapolling/main.py STRAVA_ATHLETES variable).
 1. Afterwards you should receive events for the added strava athlete.
 
 ## 💻 Planned Features? 

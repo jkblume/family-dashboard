@@ -4,13 +4,13 @@ verify_ssl = true
 name = "pypi"
 
 [packages]
-django = "==3.0"
+django = "*"
 pillow = "*"
 dj-database-url = "*"
 dj-static = "*"
 gunicorn = "*"
 psycopg2-binary = "*"
-django-redis = {editable = true,git = "https://github.com/niwinz/django-redis.git"}
+django-redis = "*"
 djangorestframework = "*"
 requests = "*"
 
