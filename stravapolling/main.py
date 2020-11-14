@@ -3,10 +3,11 @@ import logging
 import time
 import requests
 import os
+from post_to_webservice import send_post_event_request
 
-SERVER_STARTTIME = datetime.now()
+SERVER_STARTTIME = datetime.utcnow()
 
-POLLING_INTERVAL = int(os.getenv("POLL_INTERVAL", 30))
+POLLING_INTERVAL = int(os.getenv("POLL_INTERVAL", 5))
 STRAVA_CLIENT_ID = os.getenv("STRAVA_CLIENT_ID")
 STRAVA_CLIENT_SECRET = os.getenv("STRAVA_CLIENT_SECRET")
 
