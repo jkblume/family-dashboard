@@ -41,6 +41,7 @@ def get_access_token(strava_athlete: dict) -> str:
 
 def poll_strava_activities():
     for strava_athlete in STRAVA_ATHLETES:
+        print(f"Check strava athlete: {strava_athlete.get("athlete_id")}")
         access_token = get_access_token(strava_athlete)
 
         activities = strava_athlete.get("activities")
@@ -85,4 +86,5 @@ def main() -> None:
         time.sleep(POLLING_INTERVAL)
 
 if __name__ == "__main__":
+    print("Lets go...")
     main()

@@ -28,6 +28,8 @@ services:
     command: 'make run'
   stravapolling:
     build: stravapolling
+    volumes:
+    - ./stravapolling:/app
     environment:
       DJANGO_SERVER_HOST_API_URL: "http://djangoserver:8000"
     env_file:
