@@ -79,7 +79,7 @@ export class SocketIoServiceStub {
         ];
         setInterval(function () {
             let randomEvent = events[Math.floor(Math.random() * events.length)];
-            socketStub.simulate('notifications_server', JSON.stringify(randomEvent));
+            socketStub.simulate('notifications_server_eventstream', JSON.stringify(randomEvent));
         }, 3000);
 
         return socketStub;

@@ -21,8 +21,10 @@ class Event(models.Model):
             frontend_event_payload = {
                 "activityType": self.event_type,
                 "data": self.payload,
-                "timestamp": self.created.timestamp()
+                "timestamp": self.created.timestamp(),
             }
-            settings.NOTIFICATION_SERVICE.publish_notification(frontend_event_payload)
+            settings.NOTIFICATION_SERVICE.publish_notification(
+                "eventstream", frontend_event_payload
+            )
         except NotImplementedError:
             pass

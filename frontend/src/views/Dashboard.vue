@@ -57,7 +57,7 @@
             }
         },
         mounted() {
-            this.socket.on('notifications_server', function(data) {
+            this.socket.on('notifications_server_eventstream', function(data) {
                 let json = JSON.parse(data);
                 this.activityEvents.unshift(json);
                 this.activityEvents = this.activityEvents.slice(0, 4);
