@@ -34,6 +34,7 @@ services:
     volumes:
     - ./stravapolling:/app
     environment:
+      PYTHONUNBUFFERED: 1
       DJANGO_SERVER_HOST_API_URL: "http://djangoserver:8000"
     env_file:
       - secrets.env
@@ -43,6 +44,7 @@ services:
     build: randomphoto
     restart: unless-stopped
     environment:
+      PYTHONUNBUFFERED: 1
       NEW_PHOTO_INTERVAL: 300
       RANDOM_PHOTO_MODE: "SAME_DAY_ANOTHER_YEAR"
       DJANGO_SERVER_HOST_API_URL: "http://djangoserver:8000"
