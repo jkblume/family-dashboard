@@ -2,6 +2,7 @@ version: '3'
 services:
   eventbus:
     build: eventbus
+    restart: unless-stopped
     ports:
     - "8080:8080"
     environment:
@@ -10,6 +11,7 @@ services:
     - redis
   djangoserver:
     build: django-server
+    restart: unless-stopped
     ports:
     - "8000:8000"
     command: 'make run_dev'
@@ -23,6 +25,7 @@ services:
     - postgres
   frontend:
     build: frontend
+    restart: unless-stopped
     ports:
     - "80:80"
     command: 'make run'
@@ -38,6 +41,7 @@ services:
     - djangoserver
   randomphoto:
     build: randomphoto
+    restart: unless-stopped
     environment:
       RANDOM_PHOTO_MODE: "SAME_DAY_ANOTHER_YEAR"
       DJANGO_SERVER_HOST_API_URL: "http://djangoserver:8000"
@@ -45,8 +49,10 @@ services:
     - djangoserver
   redis:
     image: redis
+    restart: unless-stopped
   postgres:
     image: postgres:9.6
+    restart: unless-stopped
     environment:
       POSTGRES_USER: admin
       POSTGRES_PASSWORD: admin
