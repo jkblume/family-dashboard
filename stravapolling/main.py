@@ -57,7 +57,7 @@ def poll_strava_activities():
                 url=f"https://www.strava.com/api/v3/athlete/activities{query_params}",
                 headers={"Authorization": f"Bearer {access_token}"},
             )
-        catch:
+        except:
             continue
 
         print(response.json())
