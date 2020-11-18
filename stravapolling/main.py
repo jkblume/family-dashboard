@@ -52,10 +52,13 @@ def poll_strava_activities():
             after = last_strava_activity.start_date
 
         query_params = f"?after={after.timestamp()}"
-        response = requests.get(
-            url=f"https://www.strava.com/api/v3/athlete/activities{query_params}",
-            headers={"Authorization": f"Bearer {access_token}"},
-        )
+        try:
+            response = requests.get(
+                url=f"https://www.strava.com/api/v3/athlete/activities{query_params}",
+                headers={"Authorization": f"Bearer {access_token}"},
+            )
+        catch:
+            continue
 
         print(response.json())
 
