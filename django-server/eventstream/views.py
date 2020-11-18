@@ -29,7 +29,7 @@ def post_event(request: Request) -> Response:
 
 @api_view(["POST"])
 @renderer_classes((JSONRenderer,))
-def full_size_detail(request: Request) -> Response:
+def full_size_detail_control(request: Request) -> Response:
     try:
         settings.NOTIFICATION_SERVICE.publish_notification(
             "controls", {"control": "full_size_detail", "data": {"time": 10}}
