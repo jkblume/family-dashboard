@@ -60,6 +60,10 @@ services:
     ports:
     - "80:80"
     command: 'make run'
+  mqtt-mosquitto:
+    image: eclipse-mosquitto
+    volumes:
+    - mqtt-data:/mosquitto/data
   zigbee2mqtt:
     image: koenkk/zigbee2mqtt
     volumes:
