@@ -80,3 +80,4 @@ services:
 volumes:
   db-data:
   zigbee-gateway-data:
+  mqtt-data:
