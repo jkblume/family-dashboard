@@ -43,6 +43,7 @@ services:
     build: randomphoto
     restart: unless-stopped
     environment:
+      NEW_PHOTO_INTERVAL: 300
       RANDOM_PHOTO_MODE: "SAME_DAY_ANOTHER_YEAR"
       DJANGO_SERVER_HOST_API_URL: "http://djangoserver:8000"
     depends_on:
