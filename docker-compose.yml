@@ -54,6 +54,11 @@ services:
       POSTGRES_DB: db
     volumes:
     - db-data:/var/lib/postgresql/data
+  mqtthandler-server:
+    build: mqtthandler-server
+    restart: unless-stopped
+    volumes:
+    - mqtthandler-server-data:/data
   frontend:
     build: frontend
     restart: unless-stopped
@@ -81,3 +86,4 @@ volumes:
   db-data:
   zigbee-gateway-data:
   mqtt-data:
+  mqtthandler-server-data:
