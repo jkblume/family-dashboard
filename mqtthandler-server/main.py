@@ -16,7 +16,7 @@ b.connect()
 
 def set_indicator_light_state(on: bool) -> None:
     print(f"Light was on state {b.get_light(6, 'on')}")
-    b.set_light(INDICATOR_LIGHT_ID, 'on', on)
+    b.set_light(indicator_light_id, 'on', on)
     print(f"Light set to state {on}")
 
 
