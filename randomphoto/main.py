@@ -4,7 +4,6 @@ import random
 import datetime
 import requests
 import threading
-import dateutil.parser
 from gphotospy import authorize
 from gphotospy.media import *
 from gphotospy.album import *
