@@ -2,7 +2,9 @@ import os
 import time
 import random
 import datetime
+import requests
 import threading
+import dateutil.parser
 from gphotospy import authorize
 from gphotospy.media import *
 from gphotospy.album import *
@@ -83,33 +85,34 @@ class SameDayAnotherYear(FillPhotoBufferThread):
     def run(self):    
         media_manager = Media(self.service)
 
-        today = datetime.date.today()
-        count = 0
-        for year in range(2007, datetime.date.today().year):
-            today_in_another_year_filter = date(year, today.month, today.day)
+        while True:
+            today = datetime.date.today()
 
-            try:
-                media_list = list(media_manager.search(today_in_another_year_filter))
-            except:
-                continue
-            
-            count += len(media_list)
-            for media in media_list:
-                base_url, product_url, width, height, creation_time = get_revelant_data(media)
+            count = 0
+            for year in range(2007, datetime.date.today().year):
+                today_in_another_year_filter = date(year, today.month, today.day)
 
-
-                if next((item for item in photo_buffer if item["private_url"] == product_url), None):
+                try:
+                    media_list = list(media_manager.search(today_in_another_year_filter))
+                except:
                     continue
+                
+                count += len(media_list)
+                for media in media_list:
+                    base_url, product_url, width, height, creation_time = get_revelant_data(media)
 
-                photo_buffer.append({
-                    "public_url": f"{base_url}=w{width}-h{height}",
-                    "private_url": product_url,
-                    "creation_time": creation_time
-                })
-        
-        sleep_seconds = NEW_PHOTO_INTERVAL_SECONDS * len(photo_buffer)
-        print(f"Got all {count} photos of today in other years, sleeping for {sleep_seconds} seconds")
-        time.sleep(sleep_seconds)
+                    if next((item for item in photo_buffer if item["private_url"] == product_url), None):
+                        continue
+
+                    photo_buffer.append({
+                        "public_url": f"{base_url}=w{width}-h{height}",
+                        "private_url": product_url,
+                        "creation_time": creation_time
+                    })
+            
+            sleep_seconds = NEW_PHOTO_INTERVAL_SECONDS * len(photo_buffer)
+            print(f"Got all {count} photos of today in other years, sleeping for {sleep_seconds} seconds")
+            time.sleep(sleep_seconds)
 
 
 def main() -> None:
@@ -123,7 +126,12 @@ def main() -> None:
             continue
         
         item = photo_buffer.pop()
-        public_url, private_url, creation_time = item.get("public_url"), item.get("private_url"), item.get("creation_time")
+        public_url, private_url, creation_time = item.get("public_url"), item.get("private_url"), item.get("creation_time")        
+        
+        # check if link is aready expired
+        if requests.get(url=private_url).status_code != 200:
+            continue
+
         event_payload = {
             "person": {
                 "id": "JAKBLU",
