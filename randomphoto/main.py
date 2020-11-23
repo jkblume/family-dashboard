@@ -114,7 +114,7 @@ def main() -> None:
         event_type = "RANDOM_GOOGLE_PHOTO"
         
         print(event_payload)
-        # result = send_post_event_request(event_type, event_payload)
+        result = send_post_event_request(event_type, event_payload)
 
         time.sleep(NEW_PHOTO_INTERVAL_SECONDS)
 
