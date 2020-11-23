@@ -1,7 +1,10 @@
 import time
 import json
+import logging
 from phue import Bridge
 import paho.mqtt.client as mqtt
+
+logger = logging.getLogger(__name__)
 
 config = {}
 with open("config.json", "r") as file:
@@ -15,14 +18,14 @@ b = Bridge(ip=bridge_ip, config_file_path="/data/.python_hue")
 b.connect()
 
 def set_indicator_light_state(on: bool) -> None:
-    print(f"Light was on state {b.get_light(6, 'on')}")
+    logger.info(f"Light was on state {b.get_light(6, 'on')}")
     b.set_light(indicator_light_id, 'on', on)
-    print(f"Light set to state {on}")
+    logger.info(f"Light set to state {on}")
 
 
 # The callback for when the client receives a CONNACK response from the server.
 def on_connect(client, userdata, flags, rc):
-    print(f"Connected with result code {rc}")
+    logger.info(f"Connected with result code {rc}")
 
     # Subscribing in on_connect() means that if we lose the connection and
     # reconnect then subscriptions will be renewed.
@@ -31,7 +34,7 @@ def on_connect(client, userdata, flags, rc):
 # The callback for when a PUBLISH message is received from the server.
 def on_message(client, userdata, message):
     payload_string = message.payload.decode("utf-8")
-    print(payload_string)
+    logger.info(payload_string)
 
     payload = json.loads(payload_string)
     is_door_open = not payload.get("contact")
