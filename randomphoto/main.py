@@ -4,6 +4,7 @@ import random
 import datetime
 import requests
 import threading
+import base64
 from datetime import timedelta
 from gphotospy import authorize
 from gphotospy.media import *
@@ -14,8 +15,17 @@ NEW_PHOTO_INTERVAL_SECONDS = int(os.getenv("NEW_PHOTO_INTERVAL", 30))
 
 photo_buffer = []
 
-CLIENT_SECRET_FILE = "client_secret.json"
-service = authorize.init(CLIENT_SECRET_FILE)
+google_client_secret_json_as_base64 = os.getenv("GOOGLE_CLIENT_SECRET_JSON_AS_BASE64")
+if not google_client_secret_json_as_base64:
+    exit("Set GOOGLE_CLIENT_SECRET_JSON_AS_BASE64 env variable to start the module")
+
+CLIENT_SECRET_PATH = "client_secret.json"
+
+with open(CLIENT_SECRET_PATH, "w", encoding="utf-8") as file:
+    encoded_google_client_secret_json_as_base64 = base64.b64decode(google_client_secret_json_as_base64)
+    file.write(encoded_google_client_secret_json_as_base64.decode("utf-8"))
+
+service = authorize.init(CLIENT_SECRET_PATH)
 media_manager = Media(service)
 
 def get_random_data_range() -> (date, date):
