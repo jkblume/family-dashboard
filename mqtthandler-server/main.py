@@ -4,6 +4,7 @@ import logging
 from phue import Bridge
 import paho.mqtt.client as mqtt
 
+logging.basicConfig(format='%(asctime)s - %(message)s', level=logging.INFO)
 logger = logging.getLogger(__name__)
 
 config = {}
