@@ -4,6 +4,7 @@ import random
 import datetime
 import requests
 import threading
+from datetime import timedelta
 from gphotospy import authorize
 from gphotospy.media import *
 from gphotospy.album import *
@@ -12,6 +13,10 @@ from post_to_webservice import send_post_event_request
 NEW_PHOTO_INTERVAL_SECONDS = int(os.getenv("NEW_PHOTO_INTERVAL", 30))
 
 photo_buffer = []
+
+CLIENT_SECRET_FILE = "client_secret.json"
+service = authorize.init(CLIENT_SECRET_FILE)
+media_manager = Media(service)
 
 def get_random_data_range() -> (date, date):
     start_date = datetime.date(2007, 1, 1)
@@ -28,131 +33,90 @@ def get_random_data_range() -> (date, date):
 
     return date_range(start_date=random_start_date, end_date=random_end_date)
 
-def get_revelant_data(media_item: dict) -> (str, str, str, str, str):
+def media_item_to_dict(media_item: dict, created_by_mode: str) -> dict:
     base_url = media_item.get("baseUrl")
     product_url = media_item.get("productUrl")
     width = media_item.get("mediaMetadata").get("width")
     height = media_item.get("mediaMetadata").get("height")
     creation_time = media_item.get("mediaMetadata").get("creationTime")
 
-    return base_url, product_url, width, height, creation_time
-class FillPhotoBufferThread:
+    return {
+        "public_url": f"{base_url}=w{width}-h{height}",
+        "private_url": product_url,
+        "creation_time": creation_time,
+        "link_creation_time": datetime.datetime.now(),
+        "created_by_mode": created_by_mode
+    }
 
-    def __init__(self):
-        CLIENT_SECRET_FILE = "client_secret.json"
-        self.service = authorize.init(CLIENT_SECRET_FILE)
 
-        thread = threading.Thread(target=self.run, args=())
-        thread.daemon = True
-        thread.start()
+def get_random_photo():
+    try:
+        media_list = list(media_manager.search(get_random_data_range()))
+    except:
+        return None
+    
+    media = random.choice(media_list)
+    photo_item = media_item_to_dict(media, "RANDOM_GOOGLE_PHOTO")
 
-    def run(self):
-        print("Not implemented")
-        exit(1)
+    return photo_item
 
-class RandomPhoto(FillPhotoBufferThread):
+
+def get_same_day_another_year_photo():    
+    today = datetime.date.today()
+
+    count = 0
+
+    photos_of_the_day = []
+    for year in range(2007, datetime.date.today().year):
+        today_in_another_year_filter = date(year, today.month, today.day)
+
+        try:
+            media_list = list(media_manager.search(today_in_another_year_filter))
+        except:
+            continue
         
-    def run(self):
-        media_manager = Media(self.service)
+        photos_of_the_day += media_list
+    
+    media = random.choice(photos_of_the_day)
+    photo_item = media_item_to_dict(media, "SAME_DAY_ANOTHER_YEAR")
 
-        while True:
-            # do not let photo buffer grow to big, stop if we have a buffer that is big enough
-            if len(photo_buffer) >= 20:
-                sleep_seconds = NEW_PHOTO_INTERVAL_SECONDS * 10
-                print(f"Reached {len(photo_buffer)} photos in buffer (>20), sleeping for {sleep_seconds} seconds")
-                time.sleep(NEW_PHOTO_INTERVAL_SECONDS)
-                continue
+    return photo_item
 
-            try:
-                media_list = list(media_manager.search(get_random_data_range()))
-            except:
-                continue
-            
-            media = random.choice(media_list)
-            base_url, product_url, width, height, creation_time = get_revelant_data(media)
+def get_next_photo_item() -> dict:
+    mode = os.getenv("RANDOM_PHOTO_MODE")
+    if mode == "SAME_DAY_ANOTHER_YEAR":
+        next_photo = get_same_day_another_year_photo()
+    elif mode == "RANDOM_GOOGLE_PHOTO":
+        next_photo = get_random_photo()
+    else:
+        next_photo = get_random_photo()
 
-            photo_buffer.append({
-                "public_url": f"{base_url}=w{width}-h{height}",
-                "private_url": product_url,
-                "creation_time": creation_time
-            })
-
-            time.sleep(5)
-
-class SameDayAnotherYear(FillPhotoBufferThread):
-
-    def run(self):    
-        media_manager = Media(self.service)
-
-        while True:
-            today = datetime.date.today()
-
-            count = 0
-            for year in range(2007, datetime.date.today().year):
-                today_in_another_year_filter = date(year, today.month, today.day)
-
-                try:
-                    media_list = list(media_manager.search(today_in_another_year_filter))
-                except:
-                    continue
-                
-                count += len(media_list)
-                for media in media_list:
-                    base_url, product_url, width, height, creation_time = get_revelant_data(media)
-
-                    if next((item for item in photo_buffer if item["private_url"] == product_url), None):
-                        continue
-
-                    photo_buffer.append({
-                        "public_url": f"{base_url}=w{width}-h{height}",
-                        "private_url": product_url,
-                        "creation_time": creation_time
-                    })
-            
-            sleep_seconds = NEW_PHOTO_INTERVAL_SECONDS * len(photo_buffer)
-            print(f"Got all {count} photos of today in other years, sleeping for {sleep_seconds} seconds")
-            time.sleep(sleep_seconds)
-
+    # mainly if using same day another year mode or others that could lead to no photo for selected filter
+    if next_photo is None:
+        next_photo = get_random_photo()
+    
+    return next_photo
 
 def main() -> None:
     while True:
-        random.shuffle(photo_buffer)
-
-        if len(photo_buffer) < 1:
-            seconds = 5
-            print(f"No buffer in value, wait {seconds} seconds before next check")
-            time.sleep(seconds)
-            continue
-        
-        item = photo_buffer.pop()
-        public_url, private_url, creation_time = item.get("public_url"), item.get("private_url"), item.get("creation_time")        
-        
-        # check if link is aready expired
-        if requests.get(url=private_url).status_code != 200:
-            continue
+        item = get_next_photo_item()
 
         event_payload = {
             "person": {
                 "id": "JAKBLU",
                 "name": "Jakob",
             },
-            "publicUrl": public_url,
-            "privateUrl": private_url,
-            "creationTime": creation_time,
+            "publicUrl": item.get("public_url"),
+            "privateUrl": item.get("private_url"),
+            "creationTime": item.get("creation_time"),
+            "mode": item.get("created_by_mode"),
         }
         event_type = "RANDOM_GOOGLE_PHOTO"
         
-        print(f"Send random gooogle photo event, {len(photo_buffer)} left in queue")
-        # print(event_payload)
-        result = send_post_event_request(event_type, event_payload)
+        print(event_payload)
+        # result = send_post_event_request(event_type, event_payload)
 
         time.sleep(NEW_PHOTO_INTERVAL_SECONDS)
 
 if __name__ == "__main__":
-    mode = os.getenv("RANDOM_PHOTO_MODE")
-    if mode == "SAME_DAY_ANOTHER_YEAR":
-        fill_photo_buffer_thread = SameDayAnotherYear()
-    else:
-        fill_photo_buffer_thread = RandomPhoto()
-    
     main()
