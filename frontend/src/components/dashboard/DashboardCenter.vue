@@ -59,9 +59,9 @@
                 }
                 if (activity.activityType === 'RANDOM_GOOGLE_PHOTO') {
                     moment.locale('de');
-                    let time = moment.unix(activity.timestamp).fromNow();
+                    let photoTime = moment(activity.data.creationTime)
                     let person = ((activity.data.person) ? activity.data.person.name : "Unbekannte Person");
-                    return `Danke für das Foto <b>${person}</b>`
+                    return `RndPht™ vom <b>${photoTime.format("MMMM YYYY")}</b>`
                 }
             },
         }
@@ -79,7 +79,7 @@
 
     .activity-message {
         text-align: center;
-        font-size: 0.9rem;
+        font-size: 1.2rem;
     }
 
 </style>

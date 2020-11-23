@@ -71,6 +71,7 @@ export class SocketIoServiceStub {
                 data: {
                     privateUrl: "1234",
                     publicUrl: "https://cdn1.stuttgarter-zeitung.de/media.media.3da7e7c2-d328-47e0-b0fd-458154fdd1b1.original1024.jpg",
+                    creationTime: "2019-11-23T15:04:46Z",
                     person: {
                         name: "Max",
                     },
