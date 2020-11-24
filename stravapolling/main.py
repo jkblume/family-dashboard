@@ -6,6 +6,10 @@ import json
 import os
 from post_to_webservice import send_post_event_request
 
+
+logging.basicConfig(format='%(asctime)s - %(message)s', level=logging.INFO)
+logger = logging.getLogger(__name__)
+
 SERVER_STARTTIME = datetime.utcnow()
 
 POLLING_INTERVAL = int(os.getenv("POLL_INTERVAL", 5))
@@ -17,7 +21,7 @@ with open("athletes.json", "r") as file:
     STRAVA_ATHLETES = json.loads(file.read())
 
 def get_access_token(strava_athlete: dict) -> str:
-    if datetime.fromtimestamp(strava_athlete.get("expires_at")) > datetime.now():
+    if datetime.fromtimestamp(strava_athlete.get("expires_at")) > datetime.utcnow():
         return strava_athlete.get("access_token")
 
     data = {
@@ -32,7 +36,7 @@ def get_access_token(strava_athlete: dict) -> str:
     strava_athlete["refresh_token"] = response_data.get("refresh_token")
     strava_athlete["access_token"] = response_data.get("access_token")
     strava_athlete["expires_at"] = response_data.get("expires_at")
-    print(f"Refreshed access token for athlete {strava_athlete.get('athlete_id')}")
+    logger.info(f"Refreshed access token for athlete {strava_athlete.get('athlete_id')}")
     
     with open("athletes.json", "w") as file:
         file.write(json.dumps(STRAVA_ATHLETES))
@@ -41,7 +45,7 @@ def get_access_token(strava_athlete: dict) -> str:
 
 def poll_strava_activities():
     for strava_athlete in STRAVA_ATHLETES:
-        print(f"Check strava athlete: {strava_athlete.get('athlete_id')}")
+        logger.info(f"Check strava athlete: {strava_athlete.get('athlete_id')}")
         access_token = get_access_token(strava_athlete)
 
         activities = strava_athlete.get("activities")
@@ -60,7 +64,7 @@ def poll_strava_activities():
         except:
             continue
 
-        print(response.json())
+        logger.info(response.json())
 
         for activity in response.json():
             activity_id = str(activity.get("id"))
@@ -89,5 +93,5 @@ def main() -> None:
         time.sleep(POLLING_INTERVAL)
 
 if __name__ == "__main__":
-    print("Lets go...")
+    logger.info("Lets go...")
     main()

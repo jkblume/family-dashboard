@@ -15,8 +15,6 @@ services:
     ports:
     - "8000:8000"
     command: 'make run_dev'
-    volumes:
-    - ./django-server:/app
     environment:
       DATABASE_URL: "postgres://admin:admin@postgres:5432/db"
       CACHE_URL: "redis://redis:6379/1"
@@ -25,12 +23,12 @@ services:
     - postgres
   stravapolling:
     build: stravapolling
-    volumes:
-    - ./stravapolling:/app
     environment:
       DJANGO_SERVER_HOST_API_URL: "http://djangoserver:8000"
     env_file:
       - secrets.env
+    volumes:
+    - ./athletes.json:/app/athletes.json
     depends_on:
     - djangoserver
   randomphoto:
