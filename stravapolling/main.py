@@ -21,9 +21,13 @@ with open("athletes.json", "r") as file:
     STRAVA_ATHLETES = json.loads(file.read())
 
 def get_access_token(strava_athlete: dict) -> str:
-    if datetime.fromtimestamp(strava_athlete.get("expires_at")) > datetime.utcnow():
+    expires_at = datetime.fromtimestamp(strava_athlete.get("expires_at"))
+    datetime_utcnow = datetime.utcnow()
+    if expires_at > datetime_utcnow:
+        logger.info(f"Access token still valid: access token expires at {expires_at.isoformat()}, current utc datetime {datetime_utcnow.isoformat()}")
         return strava_athlete.get("access_token")
 
+    logger.info(f"Access token expired at {expires_at.isoformat()}, current utc datetime {datetime_utcnow.isoformat()}. Getting new token.")
     data = {
         "client_id": STRAVA_CLIENT_ID,
         "client_secret": STRAVA_CLIENT_SECRET,
