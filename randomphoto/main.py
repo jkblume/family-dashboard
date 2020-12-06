@@ -5,15 +5,17 @@ import datetime
 import requests
 import threading
 import base64
+import logging
 from datetime import timedelta
 from gphotospy import authorize
 from gphotospy.media import *
 from gphotospy.album import *
 from post_to_webservice import send_post_event_request
 
-NEW_PHOTO_INTERVAL_SECONDS = int(os.getenv("NEW_PHOTO_INTERVAL", 30))
+logging.basicConfig(format='%(asctime)s - %(message)s', level=logging.INFO)
+logger = logging.getLogger(__name__)
 
-photo_buffer = []
+NEW_PHOTO_INTERVAL_SECONDS = int(os.getenv("NEW_PHOTO_INTERVAL", 30))
 
 google_client_secret_json_as_base64 = os.getenv("GOOGLE_CLIENT_SECRET_JSON_AS_BASE64")
 if not google_client_secret_json_as_base64:
@@ -60,11 +62,16 @@ def media_item_to_dict(media_item: dict, created_by_mode: str) -> dict:
 
 
 def get_random_photo():
+    media_list = []
     try:
         media_list = list(media_manager.search(get_random_data_range()))
-    except:
-        return None
+    except Exception as e:
+        print(f"Error on retrieving list: {e}")
     
+    if len(media_list) == 0:
+        print(f"List is empty (get_random_photo)")
+        return None
+
     media = random.choice(media_list)
     photo_item = media_item_to_dict(media, "RANDOM_GOOGLE_PHOTO")
 
@@ -82,11 +89,16 @@ def get_same_day_another_year_photo():
 
         try:
             media_list = list(media_manager.search(today_in_another_year_filter))
-        except:
+        except Exception as e:
+            print(f"Error on retrieving list: {e}")
             continue
         
         photos_of_the_day += media_list
     
+    if len(photos_of_the_day) == 0:
+        print(f"List is empty (get_same_day_another_year_photo)")
+        return None
+
     media = random.choice(photos_of_the_day)
     photo_item = media_item_to_dict(media, "SAME_DAY_ANOTHER_YEAR")
 
@@ -103,12 +115,21 @@ def get_next_photo_item() -> dict:
 
     # mainly if using same day another year mode or others that could lead to no photo for selected filter
     if next_photo is None:
+        print(f"Did not found photo in first place - try it again with random photo")
         next_photo = get_random_photo()
     
     return next_photo
 
 def main() -> None:
-    while True:
+    while True:    
+        current_hour = datetime.datetime.now().hour
+
+        if 0 <= current_hour <= 6:
+            print("Not generating new photos, its sleeping time")
+            time.sleep(10)
+            continue
+
+        
         item = get_next_photo_item()
 
         event_payload = {
@@ -128,5 +149,4 @@ def main() -> None:
 
         time.sleep(NEW_PHOTO_INTERVAL_SECONDS)
 
-if __name__ == "__main__":
-    main()
+main()

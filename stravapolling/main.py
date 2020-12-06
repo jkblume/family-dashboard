@@ -57,25 +57,29 @@ def poll_strava_activities():
 
         after = SERVER_STARTTIME
         if last_strava_activity is not None:
-            after = last_strava_activity.start_date
+            parseable_datetime_string = last_strava_activity.get("start_date").replace("Z", "+00:00")
+            after = datetime.fromisoformat(parseable_datetime_string)
 
+        logger.info(f"Getting activities since {after.isoformat()}")
         query_params = f"?after={after.timestamp()}"
         try:
             response = requests.get(
                 url=f"https://www.strava.com/api/v3/athlete/activities{query_params}",
                 headers={"Authorization": f"Bearer {access_token}"},
             )
-        except:
+        except Exception as e:
+            logger.info(f"Error on getting activities: {e}")
             continue
 
         logger.info(response.json())
 
         for activity in response.json():
-            activity_id = str(activity.get("id"))
-            if next((item for item in activities if item["activity_id"] == activity_id), None):
+            activity_id = activity.get("id")
+            if any(item['id'] == activity_id for item in activities):
+                logger.info(f"Skip activity {activity_id} because we already processed it")
                 continue
 
-            activities.append(activity)
+            activities.append({"id": activity.get("id"), "start_date": activity.get("start_date")})
 
             with open("athletes.json", "w") as file:
                 file.write(json.dumps(STRAVA_ATHLETES))
@@ -88,6 +92,7 @@ def poll_strava_activities():
             }
             event_type = "STRAVA_ACTIVITY"
 
+            logger.info(payload)
             result = send_post_event_request(event_type, payload)
             
 
