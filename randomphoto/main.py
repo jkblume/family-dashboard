@@ -132,6 +132,12 @@ def main() -> None:
         
         item = get_next_photo_item()
 
+        if item is None:
+            print("No photo found. Sleeping for 60 seconds and try it again...")
+            time.sleep(60)
+            continue
+            
+
         event_payload = {
             "person": {
                 "id": "JAKBLU",
