@@ -31,7 +31,7 @@
         methods: {
             letFlow: function (waterVolume) {
                 let oneMilliliterDuration = 5000 / 440
-                let duration = oneMilliliterDuration * waterVolume
+                let duration = Math.round(oneMilliliterDuration * waterVolume)
                 if (duration > 20000) {
                     duration = 20000;
                 }
