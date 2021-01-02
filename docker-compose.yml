@@ -65,7 +65,7 @@ services:
     ports:
     - "80:80"
     command: 'make run'
-  frontend:
+  frontend-control-unit:
     build: frontend
     restart: unless-stopped
     ports:
