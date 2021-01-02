@@ -9,7 +9,7 @@ export class WaterControlServiceNetwork {
 
   letWaterFlow(duration) {
     let result = new LetWaterFlow();
-    fetch(this.apiUrl + "/let?command=" + duration)
+    fetch(this.apiUrl + "/led?command=" + duration)
       .then(responseHandler)
       .then((json) => {
         result.apiData = json.data;
