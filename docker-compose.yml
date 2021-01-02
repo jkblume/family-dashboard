@@ -65,6 +65,12 @@ services:
     ports:
     - "80:80"
     command: 'make run'
+  frontend:
+    build: frontend
+    restart: unless-stopped
+    ports:
+    - "8090:80"
+    command: 'make run'
   mqtt-mosquitto:
     image: eclipse-mosquitto
     volumes:
