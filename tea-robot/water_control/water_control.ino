@@ -1,93 +1,105 @@
-/*
-  This a simple example of the aREST Library for the ESP8266 WiFi chip.
-  See the README file for more details.
-  Written in 2015 by Marco Schwartz under a GPL license.
-*/
-
-// Import required libraries
+// Library für WiFi-Verbindung
 #include <ESP8266WiFi.h>
-#include <aREST.h>
 
-// Create aREST instance
-aREST rest = aREST();
+// Daten des WiFi-Netzwerks
+const char* ssid     = "";
+const char* password = "";
+
+// Port des Web Servers auf 80 setzen
+WiFiServer server(80);
 
 const int relay = 5;
 
-// WiFi parameters
-const char* ssid = "";
-const char* password = "";
+// Variable für den HTTP Request
+String header;
 
-// The port to listen for incoming TCP connections
-#define LISTEN_PORT           80
-
-// Create an instance of the server
-WiFiServer server(LISTEN_PORT);
-
-// Variables to be exposed to the API
-int temperature;
-int humidity;
-
-// Declare functions to be exposed to the API
-int ledControl(String command);
-
-void setup(void)
-{
-  // Start Serial
-  Serial.begin(9600);
-
+void setup() {
   pinMode(relay, OUTPUT);
+  
+  Serial.begin(115200);
 
-  // Init variables and expose them to REST API
-  temperature = 24;
-  humidity = 40;
-  rest.variable("temperature",&temperature);
-  rest.variable("humidity",&humidity);
-
-  // Function to be exposed
-  rest.function("led",ledControl);
-
-  // Give name & ID to the device (ID should be 6 characters long)
-  rest.set_id("1");
-  rest.set_name("esp8266");
-
-  // Connect to WiFi
+  // Mit dem WiFi-Netzwerk verbinden
+  Serial.print("Connecting to WiFi");
   WiFi.begin(ssid, password);
   while (WiFi.status() != WL_CONNECTED) {
     delay(500);
     Serial.print(".");
   }
+  // Lokale IP-Adresse im Seriellen Monitor ausgeben und Server starten
   Serial.println("");
   Serial.println("WiFi connected");
-
-  // Start the server
-  server.begin();
-  Serial.println("Server started");
-
-  // Print the IP address
+  Serial.println("IP address: ");
   Serial.println(WiFi.localIP());
+  server.begin();
 }
 
 void loop() {
+  WiFiClient client = server.available();   // Auf Clients (Server-Aufrufe) warten
 
-  // Handle REST calls
-  WiFiClient client = server.available();
-  if (!client) {
-    return;
-  }
-  while(!client.available()){
-    delay(1);
-  }
-  rest.handle(client);
+  if (client) {                             // Bei einem Aufruf des Servers
+    Serial.println("Client available");
+    String currentLine = "";                // String definieren für die Anfrage des Clients
 
+    while (client.connected()) { // Loop, solange Client verbunden ist
+
+      if (client.available()) {
+        char c = client.read();             // Ein (1) Zeichen der Anfrage des Clients lesen
+        Serial.write(c);                    // und es im Seriellen Monitor ausgeben
+        header += c;
+        if (c == '\n') {                    // bis eine Neue Zeile ausgegeben wird
+          
+          // Wenn der Client eine Leerzeile sendet, ist das Ende des HTTP Request erreicht
+          if (currentLine.length() == 0) {
+
+            // Der Server sendet nun eine Antwort an den Client
+            client.println("HTTP/1.1 200 OK");
+            client.println("Content-type: application/json");
+            client.println("Access-Control-Allow-Origin: *");
+            client.println("Connection: close");
+            client.println();
+
+            // Die Webseite anzeigen
+            client.println("{}");
+
+            // Die Antwort mit einer Leerzeile beenden
+            client.println();
+            // Den Loop beenden
+            break;
+          } else { // Bei einer Neuen Zeile, die Variable leeren
+            if (currentLine.indexOf("GET") != -1) {
+              String paramterName = "command=";
+              int startIndex = currentLine.indexOf(paramterName) + paramterName.length();
+              int endIndex = currentLine.lastIndexOf(" ");
+              String parameterValue = currentLine.substring(startIndex, endIndex);
+              
+              int duration = parameterValue.toInt();
+
+              if (duration > 0) {
+                relayControl(duration);
+              }
+            }
+
+            currentLine = "";
+          }
+        } else if (c != '\r') {  // alles andere als eine Leerzeile wird
+          currentLine += c;      // der Variable hinzugefüht
+        }
+      }
+    }
+    // Variable für den Header leeren
+    header = "";
+    // Die Verbindung beenden
+    client.stop();
+    Serial.println("Client disconnected");
+    Serial.println("");
+  }
 }
 
 // Custom function accessible by the API
-int ledControl(String command) {
-  
+int relayControl(int duration) {
   Serial.println("Function called: ");
-  Serial.println(command);
+  Serial.println(duration);
   
-  int duration = command.toInt();
   digitalWrite(relay, HIGH);
   Serial.println("Flowing now...");
   delay(duration); 
